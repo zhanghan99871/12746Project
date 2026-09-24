@@ -104,6 +104,55 @@ class NutritionDataLoader:
 
         return self.food_by_id[fdc_id]
 
+class PriceDataLoader:
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.price_by_id = {}
+        self.price_by_name = {}
+
+    def load(self):
+        with open(self.file_path, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
+
+        raw_prices = raw_data.get("prices", {})
+
+        for fdc_id, raw_price in raw_prices.items():
+            if raw_price is None:
+                continue
+
+            price = self.process_price(fdc_id, raw_price)
+
+            self.price_by_id[price["fdc_id"]] = price
+            self.price_by_name[price["name"].lower()] = price
+
+    def process_price(self, fdc_id, raw_price):
+        return {
+            "fdc_id": int(fdc_id),
+            "name": raw_price.get("name", ""),
+            "price_usd_per_100g": raw_price.get(
+                "price_usd_per_100g"
+            ),
+        }
+
+    def search_by_id(self, fdc_id):
+        if fdc_id not in self.price_by_id:
+            raise ValueError(
+                f"Food ID {fdc_id} not found in price data"
+            )
+
+        return self.price_by_id[fdc_id]
+
+    def search_by_name(self, query):
+        query = query.lower()
+
+        if query not in self.price_by_name:
+            raise ValueError(
+                f"Food name {query} not found in price data"
+            )
+
+        return self.price_by_name[query]
+        
+
 if __name__ == "__main__":
     loader = NutritionDataLoader(
     "../data/FoodData_Central_foundation_food_json_2026-04-30.json"
@@ -115,3 +164,12 @@ if __name__ == "__main__":
         print(each)
     test1 = loader.search_by_id(323604)
     print(test1["name"]) 
+
+    price_loader = PriceDataLoader(
+        "../data/foundation_food_prices_estimated.json"
+    )
+    price_loader.load()
+
+    price = price_loader.search_by_id(321358)
+
+    print(price)

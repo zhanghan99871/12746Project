@@ -1,8 +1,9 @@
 from food import UnitNumber, Food, Nutrition, Meal
 from constants import DAILY_REFER
+from copy import deepcopy
 class Assistant: 
     def __init__(self, daily_refer=None):
-        self.meal_today = Meal([])
+        self.meal_today = Meal()
         self.satisfied = False 
         if daily_refer is not None:
             self.daily_refer = daily_refer 
@@ -10,7 +11,7 @@ class Assistant:
             self.daily_refer = DAILY_REFER
 
     def reset(self):
-        self.meal_today = Meal([])
+        self.meal_today = Meal()
         self.satisfied = False 
 
     def record(self, food_type, weight):
@@ -21,6 +22,9 @@ class Assistant:
         if diff == zero:
             self.satisfied = True 
             print("You have satisfied the nutrition requirement for today!") 
+
+    def diff(self):
+        return self.daily_refer - self.meal_today.total_nutri
 
     def report_today(self):
         print("Today you have eaten: \n")

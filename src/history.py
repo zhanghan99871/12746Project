@@ -1,7 +1,6 @@
 from pathlib import Path
 import json
 
-
 class History:
     def __init__(self, path=None):
         self.path = path
@@ -78,3 +77,9 @@ class History:
             total_satisfied += int(value["satisfied"])
         print(f"You have recorded for {self.date} days")
         print(f"Among these days, you have satisfied the nutrition requirement for {total_satisfied} days!")
+
+    def get_today(self):
+        if str(self.date) in self.total_hist:
+            return self.total_hist[str(self.date)]
+        else:
+            return None 

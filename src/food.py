@@ -6,10 +6,10 @@ necessity = {
     "Carbohydrate": "g", 
     "Vitamin A": "µg",
     "Vitamin C": "mg",
-    "Vitamin B-6": "mg",
-    "Vitamin B-12": "µg",
     "Vitamin E": "mg",
-    "Vitamin K": "µg"
+    # "Vitamin B-6": "mg",
+    # "Vitamin B-12": "µg",
+    # "Vitamin K": "µg"
 }
 
 mass_mapping = {
@@ -128,7 +128,7 @@ class Food:
         self.total_nutri = self.nutri_per_gram * (self.weight / 100)
 
     def __str__(self):
-        res = f"Name: {self.name}, Weight: {self.weight}\n"
+        res = f"Name: {self.name}, Weight: {self.weight:.2f} g\n"
         res += "Nutrition per 100g: \n"
         res += str(self.nutri_per_gram)
         if self.total_nutri is not None: 
@@ -142,7 +142,9 @@ class Food:
         }
 
 class Meal: 
-    def __init__(self, food_list):
+    def __init__(self, food_list=None):
+        if food_list is None:
+            food_list = [] 
         self.food_list = food_list
         self.total_nutri = Nutrition() 
         for each in self.food_list:
@@ -155,7 +157,7 @@ class Meal:
     def __str__(self):
         res = ""
         for each in self.food_list:
-            res += f"Name: {each.name}, Weight: {each.weight}\n"
+            res += f"Name: {each.name}, Weight: {each.weight:.2f} g\n"
         res += str(self.total_nutri)
         return res 
 
