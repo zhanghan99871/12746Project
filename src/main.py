@@ -63,11 +63,12 @@ def handle_load(history, args):
     else:
         history.load() 
 
-def handle_clear(history, args):
+def handle_clear(assistant, history, args):
     if len(args) > 0:
         history.clear(path=args[0]) 
     else:
         history.clear() 
+    assistant.reset() 
 
 def autosave(assistant, history):
     if assistant.has_eaten():
@@ -151,7 +152,7 @@ def main():
                 handle_save(assistant, history, args) 
 
             elif command == "clear":
-                handle_clear(history, args) 
+                handle_clear(assistant, history, args) 
 
             else:
                 print(f"Unknown command: {command}")
