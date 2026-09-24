@@ -11,7 +11,7 @@ abbr_mapping = {
 
 }
 
-class DataLoader:
+class NutritionDataLoader:
     def __init__(self, file_path):
         self.file_path = file_path
         self.food_by_name = {}
@@ -105,7 +105,7 @@ class DataLoader:
         return self.food_by_id[fdc_id]
 
 if __name__ == "__main__":
-    loader = DataLoader(
+    loader = NutritionDataLoader(
     "../data/FoodData_Central_foundation_food_json_2026-04-30.json"
     )
 

@@ -17,7 +17,8 @@ class CommandParser:
         return command, args
 
     def check(self, command, args):
-        if command == "exit" or command == "history" or command == "help" or command == "today":
+        if (command == "exit" or command == "history" or command == "help" 
+            or command == "today" or command == "newday"):
             return len(args) == 0
         
         elif command == "search":
@@ -28,5 +29,8 @@ class CommandParser:
 
         elif command == "recommend":
             return len(args) == 1
+
+        elif command == "load" or command == "save" or command == "clear":
+            return len(args) == 1 or len(args) == 0 
 
         return False 

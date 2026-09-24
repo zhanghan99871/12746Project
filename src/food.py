@@ -25,6 +25,16 @@ energy_mapping = {
     'cal': 4.184
 }
 
+eps = 1e-8
+
+def transit(value, source_unit, target_unit):
+    if source_unit in mass_mapping:
+        return value * mass_mapping[source_unit] / mass_mapping[target_unit] 
+    elif source_unit in energy_mapping:
+        return value * energy_mapping[source_unit] / energy_mapping[target_unit]
+    else:
+        raise ValueError(f"{source_unit} not supported") 
+
 class UnitNumber: 
     def __init__(self, number, unit):
         self.unit = unit 
@@ -32,20 +42,14 @@ class UnitNumber:
 
     def __add__(self, other):
         if self.unit != other.unit:
-            if self.unit in mass_mapping:
-                other_number = other.number * mass_mapping[other.unit] / mass_mapping[self.unit]
-            else:
-                other_number = other.number * energy_mapping[other.unit] / energy_mapping[self.unit]
+            other_number = transit(other.number, other.unit, self.unit) 
         else:
             other_number = other.number
         return UnitNumber(self.number + other_number, self.unit)
 
     def __sub__(self, other):
         if self.unit != other.unit:
-            if self.unit in mass_mapping:
-                other_number = other.number * mass_mapping[other.unit] / mass_mapping[self.unit]
-            else:
-                other_number = other.number * energy_mapping[other.unit] / energy_mapping[self.unit]
+            other_number = transit(other.number, other.unit, self.unit)
         else:
             other_number = other.number
         return UnitNumber(max(self.number - other_number, 0), self.unit, )
@@ -55,6 +59,13 @@ class UnitNumber:
 
     def __str__(self):
         return f"{self.number:.2f} {self.unit}" 
+
+    def __eq__(self, other):
+        if self.unit != other.unit:
+            other_number = transit(other.number, other.unit, self.unit)
+        else:
+            other_number = other.number
+        return abs(self.number - other_number) < eps 
 
 class Nutrition:
     # tuple of different kinds of nutrition 
@@ -96,6 +107,12 @@ class Nutrition:
         res += "\n"
         return res 
 
+    def __eq__(self, other):
+        for key in necessity.keys():
+            if self.nutrition[key] != other.nutrition[key]:
+                return False 
+        return True 
+
 class Food:
     def __init__(self, name, weight=None, nuts=None):
         self.name = name 
@@ -118,6 +135,11 @@ class Food:
             res += "Total nutrition: \n"
             res += str(self.total_nutri) 
         return res 
+    def to_save(self):
+        return {
+            "name": self.name,
+            "weight": self.weight
+        }
 
 class Meal: 
     def __init__(self, food_list):
@@ -136,3 +158,25 @@ class Meal:
             res += f"Name: {each.name}, Weight: {each.weight}\n"
         res += str(self.total_nutri)
         return res 
+
+    def to_save(self):
+        return {
+            "foods": [
+                food.to_save()
+                for food in self.food_list
+            ],
+            "total_nutrition": {
+                name: {
+                    "number": value.number,
+                    "unit": value.unit
+                }
+                for name, value in self.total_nutri.nutrition.items()
+            }
+        }
+
+if __name__ == "__main__":
+    n1 = Nutrition() 
+    n2 = Nutrition()
+    print(n1 == n2) 
+    n1.nutrition["Protein"] += UnitNumber(2, 'g') 
+    print(n1 == n2) 
