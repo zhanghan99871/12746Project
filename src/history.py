@@ -53,11 +53,7 @@ class History:
             self.total_hist[str(self.date)] = new_hist
 
             with open(file, "w", encoding="utf-8") as f:
-                json.dump(
-                    self.total_hist,
-                    f,
-                    indent=4
-                )
+                json.dump(self.total_hist, f, indent=4)
 
         except Exception as e:
             print(e)
@@ -83,3 +79,46 @@ class History:
             return self.total_hist[str(self.date)]
         else:
             return None 
+
+class UserInfo:
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.user_info = {} 
+        self.need_save = False
+
+    def get_file(self, path=None):
+        if path is not None:
+            return Path(path)
+
+        if self.file_path is not None:
+            return Path(self.file_path)
+
+        raise ValueError("No valid file path")
+    
+    def load(self, path=None):
+        file = self.get_file(path) 
+        if not file.exists() or file.stat().st_size == 0:
+            self.need_save = True 
+            self.register()
+            return
+
+        try:
+            with open(file, "r", encoding="utf-8") as f:
+                self.user_info = json.load(f)
+
+        except Exception as e:
+            print(e)
+    
+    def save(self, path=None):
+        file = self.get_file(path) 
+        try:
+
+            with open(file, "w", encoding="utf-8") as f:
+                json.dump(self.user_info, f, indent=4)
+
+        except Exception as e:
+            print(e)
+
+    def register(self):
+        user_name = input("Assistant> Please input your name: ")
+        self.user_info["user_name"] = user_name 

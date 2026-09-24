@@ -151,8 +151,8 @@ class PriceDataLoader:
             )
 
         return self.price_by_name[query]
-        
 
+    
 if __name__ == "__main__":
     loader = NutritionDataLoader(
     "../data/FoodData_Central_foundation_food_json_2026-04-30.json"
