@@ -134,6 +134,7 @@ class Recommender:
         return recommend_meal, self.price_for_meal(recommend_meal)
 
     def cheap_rec(self):
+        # pick the cheapest combination of foods that meets the nutritional requirements
         if self.price_matrix is None or self.nutrition_matrix is None or self.id_list is None: 
             self.build_matrix() 
         diff = self.assistant.diff()

@@ -18,8 +18,6 @@ class NutritionDataLoader:
         self.food_by_id = {}
 
     def load(self):
-        """Load and process the USDA Foundation Food JSON file."""
-
         with open(self.file_path, "r", encoding="utf-8") as f:
             raw_data = json.load(f)
 

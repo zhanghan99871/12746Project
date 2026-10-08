@@ -1,1 +1,47 @@
-{}
+{
+    "1": {
+        "meal": {
+            "foods": [
+                {
+                    "name": "Egg, whole, raw, frozen, pasteurized",
+                    "weight": -10.0
+                }
+            ],
+            "total_nutrition": {
+                "Protein": {
+                    "number": -1.2300000000000002,
+                    "unit": "g"
+                },
+                "Energy": {
+                    "number": -15.0,
+                    "unit": "kcal"
+                },
+                "Fat": {
+                    "number": -1.03,
+                    "unit": "g"
+                },
+                "Fiber": {
+                    "number": 0.0,
+                    "unit": "g"
+                },
+                "Carbohydrate": {
+                    "number": -0.09100000000000001,
+                    "unit": "g"
+                },
+                "Vitamin A": {
+                    "number": 0.0,
+                    "unit": "\u00b5g"
+                },
+                "Vitamin C": {
+                    "number": 0.0,
+                    "unit": "mg"
+                },
+                "Vitamin E": {
+                    "number": 0.0,
+                    "unit": "mg"
+                }
+            }
+        },
+        "satisfied": false
+    }
+}
